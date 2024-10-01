@@ -19,10 +19,11 @@ export class LoginComponent {
   get email() {
     return this.loginForm.get('email') as FormControl;
   }
-  
+
   get password() {
     return this.loginForm.get('password') as FormControl;
   }
+  //#endregion
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
@@ -37,6 +38,8 @@ export class LoginComponent {
       this.authService.login(email, password).subscribe({
         next: (response) => {
           console.log('Login successful', response);
+          localStorage.setItem('currentUser', JSON.stringify(response.token));
+
         },
         error: (error) => {
           console.error('Login failed', error);
@@ -45,12 +48,5 @@ export class LoginComponent {
     } else {
       console.log('Form is invalid');
     }
-  }
-
-  disableSubmitButton() {
-    if (this.loginForm.invalid) {
-      return true;
-    }
-    return false;
   }
 }
