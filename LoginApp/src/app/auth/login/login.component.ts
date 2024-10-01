@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -25,11 +25,18 @@ export class LoginComponent {
   }
   //#endregion
 
+  //#region clear local storage on refresh
+
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
+
+    window.onbeforeunload = function () {
+      localStorage.clear();
+      return '';
+    };
   }
 
   onSubmit() {
@@ -39,7 +46,6 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful', response);
           localStorage.setItem('currentUser', JSON.stringify(response.token));
-
         },
         error: (error) => {
           console.error('Login failed', error);
