@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.proxy.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -50,7 +51,6 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful', response);
           localStorage.setItem('currentUser', JSON.stringify(response.token));
-
           this.router.navigateByUrl('register');
         },
         error: (error) => {

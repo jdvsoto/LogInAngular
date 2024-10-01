@@ -8,8 +8,9 @@ import { LoginComponent } from './auth/login/login.component';
 import { AuthService } from './services/auth.proxy.service';
 import { provideHttpClient } from '@angular/common/http';
 import { RegisterComponent } from './auth/register/register.component';
+import { NotFoundComponentComponent } from './components/not-found.component/not-found.component.component';
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent],
+  declarations: [AppComponent, LoginComponent, RegisterComponent, NotFoundComponentComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
