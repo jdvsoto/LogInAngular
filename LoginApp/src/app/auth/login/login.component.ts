@@ -14,13 +14,20 @@ import { AuthService } from '../../services/auth.proxy.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required]);
+
+  //#region Getters
+  get email() {
+    return this.loginForm.get('email') as FormControl;
+  }
+  
+  get password() {
+    return this.loginForm.get('password') as FormControl;
+  }
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
-      email: this.email,
-      password: this.password,
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
     });
   }
 
@@ -38,5 +45,12 @@ export class LoginComponent {
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  disableSubmitButton() {
+    if (this.loginForm.invalid) {
+      return true;
+    }
+    return false;
   }
 }

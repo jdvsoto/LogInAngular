@@ -7,9 +7,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthService } from './services/auth.proxy.service';
 import { provideHttpClient } from '@angular/common/http';
-
+import { RegisterComponent } from './auth/register/register.component';
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, RegisterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
