@@ -6,6 +6,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.proxy.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -27,16 +28,19 @@ export class LoginComponent {
 
   //#region clear local storage on refresh
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
 
-    window.onbeforeunload = function () {
+    window.addEventListener('unload', function () {
       localStorage.clear();
-      return '';
-    };
+    });
   }
 
   onSubmit() {
@@ -46,6 +50,8 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful', response);
           localStorage.setItem('currentUser', JSON.stringify(response.token));
+
+          this.router.navigateByUrl('register');
         },
         error: (error) => {
           console.error('Login failed', error);

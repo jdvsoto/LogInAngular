@@ -27,14 +27,13 @@
     <small class="error-message" *ngIf="password.invalid && password.touched">
       Password is required
     </small>
-    <!-- <a routerLink="/register"> -->
-      <button
-        type="submit"
-        [disabled]="loginForm.invalid"
-        class="submit-button"
-      >
-        Ingresar
-      </button>
-    <!-- </a> -->
+    <button
+      type="submit"
+      [disabled]="loginForm.invalid"
+      class="submit-button"
+      (click)="onSubmit()"
+    >
+      Ingresar
+    </button>
   </form>
 </div>
