@@ -1,21 +1,32 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   Validators,
   FormBuilder,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.proxy.service';
+import { AuthenticationService } from '../../services/authentication-service.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  constructor(
+    private fb: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {
+    this.loginForm = this.fb.group({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+    });
+  }
+
   loginForm: FormGroup;
+  isLoading = false;
 
   //#region Getters
   get email() {
@@ -29,32 +40,29 @@ export class LoginComponent {
 
   //#region clear local storage on refresh
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-    });
-
-    window.addEventListener('unload', function () {
-      localStorage.clear();
-    });
+  ngOnInit(): void {
+    if (this.authenticationService.isUserLoggedIn()) {
+      this.router.navigateByUrl('register');
+    }
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      this.authService.login(email, password).subscribe({
-        next: (response) => {
-          console.log('Login successful', response);
-          localStorage.setItem('currentUser', JSON.stringify(response.token));
-          this.router.navigateByUrl('register');
+      this.isLoading = true;
+      this.authenticationService.login(email, password).subscribe({
+        next: (loginStatus) => {
+          if (!loginStatus) {
+            console.log('Login failed');
+          } else {
+            console.log('Login successful');
+          }
         },
         error: (error) => {
-          console.error('Login failed', error);
+          console.error('Login error:', error);
+        },
+        complete: () => {
+          this.isLoading = false;
         },
       });
     } else {

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthService } from './auth.proxy.service';
+import { AuthenticationProxy } from './authentication.proxy.service';
 
 describe('AuthService', () => {
-  let service: AuthService;
+  let service: AuthenticationProxy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AuthService);
+    service = TestBed.inject(AuthenticationProxy);
   });
 
   it('should be created', () => {

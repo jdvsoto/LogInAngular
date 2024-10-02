@@ -18,11 +18,11 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
-    canMatch: [authGuard],
+    // canMatch: [authGuard],
   },
   {
     path: '**',
-    component: NotFoundComponentComponent
+    component: NotFoundComponentComponent,
   },
 ];
 
